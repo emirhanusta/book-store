@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:h2:./devdb
+    url: jdbc:h2:./devdb;AUTO_SERVER=TRUE
     username: sa
   jpa:
     hibernate:
