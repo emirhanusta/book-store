@@ -1,7 +1,0 @@
-spring:
-  datasource:
-    url: jdbc:h2:./devdb;AUTO_SERVER=TRUE
-    username: sa
-  jpa:
-    hibernate:
-      ddl-auto: update
