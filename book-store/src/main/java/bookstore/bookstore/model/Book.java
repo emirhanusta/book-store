@@ -1,9 +1,6 @@
 package bookstore.bookstore.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -22,6 +19,9 @@ public class Book extends BaseEntity{
     private Integer quantity;
     private Double price;
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    BookStatus bookStatus;
 
     @OneToOne
     private Image image;
