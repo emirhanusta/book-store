@@ -42,30 +42,10 @@ public class UserService {
         }
     }
 
-    public List<BookListResponseDto> getBookListByUserId(Long id) {
-        Optional<User> user = userRepository.findById(id);
-
-        if (user.isPresent()) {
-            return user.get().getBooks()
-                    .stream()
-                    .map(BookDtoConverter::convertToBookListResponse)
-                    .toList();
-        } else {
-            throw new NotFoundException("User not found");
-        }
-    }
-
-    public List<BookListResponseDto> getBookListByUserIdWithBookStatus(Long id, BookStatus bookStatus) {
-        Optional<User> user = userRepository.findById(id);
-
-        if (user.isPresent()) {
-            List<Book> books = user.get().getBooks()
-                    .stream()
-                    .filter(book -> book.getBookStatus().equals(bookStatus))
-                    .toList();
-            return books.stream()
-                    .map(BookDtoConverter::convertToBookListResponse)
-                    .toList();
+    public User findById(Long userId) {
+        Optional<User> optionalUser= userRepository.findById(userId);
+        if (optionalUser.isPresent()) {
+            return optionalUser.get();
         } else {
             throw new NotFoundException("User not found");
         }
@@ -80,6 +60,8 @@ public class UserService {
                 List<Book> books = user.get().getBooks();
                 books.add(book.get());
                 book.get().setBookStatus(bookStatus);
+                user.get().setBooks(books);
+                userRepository.save(user.get());
 
                 return books.stream()
                         .map(BookDtoConverter::convertToBookListResponse)

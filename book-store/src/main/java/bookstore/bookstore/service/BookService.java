@@ -36,9 +36,9 @@ public class BookService {
         return BookDtoConverter.convertToBookResponse(book);
     }
 
-    public BookResponseDto updateBook(Long id, UpdateBookRequest updateBookRequest) {
+    public BookResponseDto updateBook(UpdateBookRequest updateBookRequest) {
 
-        Optional<Book> book = bookRepository.findById(id);
+        Optional<Book> book = bookRepository.findById(updateBookRequest.getId());
 
         if (book.isPresent()) {
             book.get().setBookStatus(updateBookRequest.getBookStatus());
@@ -65,12 +65,20 @@ public class BookService {
         } else
             throw new NotFoundException("Book not found");
     }
-    public Book getOneBookById(Long id) {
+
+    public void deleteBookById(Long id) {
+        Optional<Book> book = bookRepository.findById(id);
+        if (book.isPresent()) {
+            bookRepository.delete(book.get());
+        } else
+            throw new NotFoundException("Book not found");
+    }
+
+    protected Book getOneBookById(Long id) {
         Optional<Book> book = bookRepository.findById(id);
         if (book.isPresent()) {
             return book.get();
         } else
             throw new NotFoundException("Book not found");
     }
-
 }
