@@ -4,7 +4,6 @@ import bookstore.bookstore.dto.request.SaveBookRequest;
 import bookstore.bookstore.dto.request.UpdateBookRequest;
 import bookstore.bookstore.dto.response.BookListResponseDto;
 import bookstore.bookstore.dto.response.BookResponseDto;
-import bookstore.bookstore.model.BookStatus;
 import bookstore.bookstore.service.BookListService;
 import bookstore.bookstore.service.BookService;
 import jakarta.validation.Valid;
@@ -29,7 +28,7 @@ public class BookController {
                 .body(bookService.saveBook(saveBookRequest));
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/update")
     public ResponseEntity<BookResponseDto> updateBook(@Valid @RequestBody UpdateBookRequest updateBookRequest) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(bookService.updateBook(updateBookRequest));
@@ -51,18 +50,6 @@ public class BookController {
     public ResponseEntity<List<BookListResponseDto>> getBookByTitle(@PathVariable String title) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(bookListService.getBookByTitle(title));
-    }
-
-    @GetMapping("/getByUserId/{userId}")
-    public ResponseEntity<List<BookListResponseDto>> getBookListByUserId(@PathVariable Long userId) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(bookListService.getBookListByUserId(userId));
-    }
-
-    @GetMapping("/getByUserIdWithBookStatus/{userId}/{bookStatus}")
-    public ResponseEntity<List<BookListResponseDto>> getBookListByUserIdWithBookStatus(@PathVariable Long userId, @PathVariable BookStatus bookStatus) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(bookListService.getBookListByUserIdWithBookStatus(userId, bookStatus));
     }
 
     @GetMapping("/getByCategoryName/{categoryName}")

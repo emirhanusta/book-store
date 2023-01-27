@@ -11,8 +11,6 @@ public class BookListResponseDto {
 
         private Long id;
         private String title;
-        private String author;
-        private Double price;
         private Long categoryId;
         private Long imageId;
 }

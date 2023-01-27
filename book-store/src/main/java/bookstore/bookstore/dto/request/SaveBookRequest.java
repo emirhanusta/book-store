@@ -1,6 +1,5 @@
 package bookstore.bookstore.dto.request;
 
-import bookstore.bookstore.model.BookStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -16,20 +15,10 @@ public class SaveBookRequest {
     private String title;
     @NotBlank
     private String author;
-    @NotBlank
-    private String isbn;
-    @NotBlank
-    private String publisher;
-    @NotBlank
+    @NotNull
     private Integer pages;
-    @NotBlank
-    private Integer quantity;
-    @NotBlank
-    private Double price;
     @NotNull
     private String description;
-    @NotNull
-    private BookStatus bookStatus;
     @NotNull
     private Long categoryId;
 

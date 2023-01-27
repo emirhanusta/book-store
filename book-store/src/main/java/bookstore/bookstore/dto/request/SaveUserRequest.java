@@ -20,5 +20,5 @@ public class SaveUserRequest {
     @Email
     private String email;
     @NotBlank
-    private Role role;
+    private String role;
 }

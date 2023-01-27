@@ -1,19 +1,15 @@
 package bookstore.bookstore.service;
 
-import bookstore.bookstore.dto.converter.BookDtoConverter;
 import bookstore.bookstore.dto.converter.UserDtoConvertor;
 import bookstore.bookstore.dto.request.SaveUserRequest;
-import bookstore.bookstore.dto.response.BookListResponseDto;
 import bookstore.bookstore.dto.response.UserResponseDto;
 import bookstore.bookstore.exception.NotFoundException;
-import bookstore.bookstore.model.Book;
-import bookstore.bookstore.model.BookStatus;
+import bookstore.bookstore.model.Role;
 import bookstore.bookstore.model.User;
 import bookstore.bookstore.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,12 +19,14 @@ public class UserService {
     private final UserRepository userRepository;
     private final BookService bookService;
 
-    public UserResponseDto createUser(SaveUserRequest request) {
+    public UserResponseDto saveUser(SaveUserRequest request) {
         User user = User.builder()
                 .username(request.getUsername())
                 .password(request.getPassword())
+                .email(request.getEmail())
+                .role(Role.valueOf(request.getRole()))
                 .build();
-
+        userRepository.save(user);
         return UserDtoConvertor.convertToUserResponseDto(user);
     }
 
@@ -42,35 +40,4 @@ public class UserService {
         }
     }
 
-    public User findById(Long userId) {
-        Optional<User> optionalUser= userRepository.findById(userId);
-        if (optionalUser.isPresent()) {
-            return optionalUser.get();
-        } else {
-            throw new NotFoundException("User not found");
-        }
-    }
-
-    public List<BookListResponseDto> addBookToUserBoookList(Long id, Long bookId, BookStatus bookStatus) {
-        Optional<User> user = userRepository.findById(id);
-        Optional<Book> book = Optional.ofNullable(bookService.getOneBookById(bookId));
-
-        if (user.isPresent()) {
-            if (book.isPresent()) {
-                List<Book> books = user.get().getBooks();
-                books.add(book.get());
-                book.get().setBookStatus(bookStatus);
-                user.get().setBooks(books);
-                userRepository.save(user.get());
-
-                return books.stream()
-                        .map(BookDtoConverter::convertToBookListResponse)
-                        .toList();
-            } else {
-                throw new NotFoundException("Book not found");
-            }
-        } else {
-            throw new NotFoundException("User not found");
-        }
-    }
 }

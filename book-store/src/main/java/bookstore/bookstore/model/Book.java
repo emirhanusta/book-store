@@ -13,17 +13,13 @@ public class Book extends BaseEntity{
 
     private String title;
     private String author;
-    private String isbn;
-    private String publisher;
     private Integer pages;
-    private Integer quantity;
-    private Double price;
     private String description;
 
-    @Enumerated(EnumType.STRING)
-    BookStatus bookStatus;
-
     @OneToOne
+    @JoinTable(name = "book_image",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "image_id"))
     private Image image;
 
     @ManyToOne

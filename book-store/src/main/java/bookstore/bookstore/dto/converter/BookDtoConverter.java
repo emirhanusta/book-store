@@ -11,12 +11,9 @@ public class BookDtoConverter {
                 .id(book.getId())
                 .title(book.getTitle())
                 .author(book.getAuthor())
-                .isbn(book.getIsbn())
-                .publisher(book.getPublisher())
                 .pages(book.getPages())
-                .price(book.getPrice())
                 .description(book.getDescription())
-                .bookStatus(book.getBookStatus())
+                .categoryId(book.getCategory().getId())
                 .build();
     }
 
@@ -24,8 +21,7 @@ public class BookDtoConverter {
         return BookListResponseDto.builder()
                 .id(book.getId())
                 .title(book.getTitle())
-                .author(book.getAuthor())
-                .price(book.getPrice())
+                .categoryId(book.getCategory().getId())
                 .build();
     }
 }

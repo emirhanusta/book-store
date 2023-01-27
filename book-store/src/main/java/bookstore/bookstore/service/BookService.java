@@ -24,13 +24,9 @@ public class BookService {
         Book book = Book.builder()
                 .title(saveBookRequest.getTitle())
                 .author(saveBookRequest.getAuthor())
-                .isbn(saveBookRequest.getIsbn())
-                .publisher(saveBookRequest.getPublisher())
                 .pages(saveBookRequest.getPages())
-                .quantity(saveBookRequest.getQuantity())
-                .price(saveBookRequest.getPrice())
                 .description(saveBookRequest.getDescription())
-                .bookStatus(saveBookRequest.getBookStatus())
+                .category(categoryService.findById(saveBookRequest.getCategoryId()))
                 .build();
         bookRepository.save(book);
         return BookDtoConverter.convertToBookResponse(book);
@@ -41,15 +37,10 @@ public class BookService {
         Optional<Book> book = bookRepository.findById(updateBookRequest.getId());
 
         if (book.isPresent()) {
-            book.get().setBookStatus(updateBookRequest.getBookStatus());
             book.get().setCategory(categoryService.findById(updateBookRequest.getCategoryId()));
             book.get().setAuthor(updateBookRequest.getAuthor());
             book.get().setDescription(updateBookRequest.getDescription());
-            book.get().setIsbn(updateBookRequest.getIsbn());
             book.get().setPages(updateBookRequest.getPages());
-            book.get().setPrice(updateBookRequest.getPrice());
-            book.get().setPublisher(updateBookRequest.getPublisher());
-            book.get().setQuantity(updateBookRequest.getQuantity());
             book.get().setTitle(updateBookRequest.getTitle());
             bookRepository.save(book.get());
             return BookDtoConverter.convertToBookResponse(book.get());
