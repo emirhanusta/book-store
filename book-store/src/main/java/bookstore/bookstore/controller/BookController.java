@@ -22,22 +22,24 @@ public class BookController {
     private final BookService bookService;
     private final BookListService bookListService;
 
-    @PostMapping("/save")
+    @PostMapping
     public ResponseEntity<BookResponseDto> saveBook(@Valid @RequestBody SaveBookRequest saveBookRequest) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(bookService.saveBook(saveBookRequest));
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public ResponseEntity<BookResponseDto> updateBook(@Valid @RequestBody UpdateBookRequest updateBookRequest) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(bookService.updateBook(updateBookRequest));
     }
 
-    @GetMapping("/getAll")
-    public ResponseEntity<List<BookListResponseDto>> getAllBooks() {
+    @GetMapping
+    public ResponseEntity<List<BookListResponseDto>> getAllBooks(@RequestParam(name = "page", value = "1") int page,
+                                                                 @RequestParam(name = "size", value = "5") int size)
+    {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(bookListService.getAllBooks());
+                .body(bookListService.getAllBooks(page,size));
     }
 
     @GetMapping("/getById/{id}")
@@ -59,7 +61,7 @@ public class BookController {
     }
 
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping
     public ResponseEntity<Void> deleteBookById(@PathVariable Long id) {
         bookService.deleteBookById(id);
         return ResponseEntity.status(HttpStatus.OK)

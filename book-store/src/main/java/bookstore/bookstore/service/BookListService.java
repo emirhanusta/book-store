@@ -5,6 +5,7 @@ import bookstore.bookstore.dto.converter.BookDtoConverter;
 import bookstore.bookstore.model.Book;
 import bookstore.bookstore.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,11 +16,10 @@ public class BookListService {
 
     private final BookRepository bookRepository;
     private final CategoryService categoryService;
-    private final UserService userService;
 
 
-    public List<BookListResponseDto> getAllBooks() {
-        List<Book> books = bookRepository.findAll();
+    public List<BookListResponseDto> getAllBooks(int page,int size ) {
+        List<Book> books = bookRepository.findAll(PageRequest.of(page, size)).toList();
         return books.stream()
                 .map(BookDtoConverter::convertToBookListResponse)
                 .toList();

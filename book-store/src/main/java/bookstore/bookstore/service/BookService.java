@@ -65,11 +65,4 @@ public class BookService {
             throw new NotFoundException("Book not found");
     }
 
-    protected Book getOneBookById(Long id) {
-        Optional<Book> book = bookRepository.findById(id);
-        if (book.isPresent()) {
-            return book.get();
-        } else
-            throw new NotFoundException("Book not found");
-    }
 }

@@ -17,19 +17,19 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @PostMapping("/save")
+    @PostMapping
     public ResponseEntity<Category> saveCategory(@Valid @RequestBody SaveCategoryRequest category) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(categoryService.saveCategory(category));
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public ResponseEntity<Category> updateCategory(@RequestBody UpdateCategoryRequest category) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(categoryService.updateCategory(category));
     }
 
-    @GetMapping("/getAll")
+    @GetMapping
     public ResponseEntity<?> getAllCategories() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(categoryService.getAllCategories());
