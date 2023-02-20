@@ -3,11 +3,12 @@ package bookstore.bookstore.service;
 import bookstore.bookstore.dto.converter.UserDtoConvertor;
 import bookstore.bookstore.dto.request.SaveUserRequest;
 import bookstore.bookstore.dto.response.UserResponseDto;
-import bookstore.bookstore.exception.NotFoundException;
+import bookstore.bookstore.exception.GeneralException;
 import bookstore.bookstore.model.Role;
 import bookstore.bookstore.model.User;
 import bookstore.bookstore.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -35,7 +36,7 @@ public class UserService {
         if (user.isPresent()) {
             return UserDtoConvertor.convertToUserResponseDto(user.get());
         } else {
-            throw new NotFoundException("User not found");
+            throw new GeneralException("User not found", HttpStatus.NOT_FOUND);
         }
     }
 

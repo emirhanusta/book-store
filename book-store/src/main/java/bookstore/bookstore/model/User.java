@@ -12,6 +12,7 @@ import lombok.*;
 @Table(name = "users")
 public class User extends BaseEntity{
 
+    @Column(unique = true)
     private String username;
     private String password;
     private String email;

@@ -4,10 +4,11 @@ import bookstore.bookstore.dto.response.BookResponseDto;
 import bookstore.bookstore.dto.converter.BookDtoConverter;
 import bookstore.bookstore.dto.request.SaveBookRequest;
 import bookstore.bookstore.dto.request.UpdateBookRequest;
-import bookstore.bookstore.exception.NotFoundException;
+import bookstore.bookstore.exception.GeneralException;
 import bookstore.bookstore.model.Book;
 import bookstore.bookstore.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -45,7 +46,7 @@ public class BookService {
             bookRepository.save(book.get());
             return BookDtoConverter.convertToBookResponse(book.get());
         } else {
-            throw new NotFoundException("Book not found");
+            throw new GeneralException("Book not found", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -54,7 +55,7 @@ public class BookService {
         if (book.isPresent()) {
             return BookDtoConverter.convertToBookResponse(book.get());
         } else
-            throw new NotFoundException("Book not found");
+            throw new GeneralException("Book not found", HttpStatus.NOT_FOUND);
     }
 
     public void deleteBookById(Long id) {
@@ -62,7 +63,7 @@ public class BookService {
         if (book.isPresent()) {
             bookRepository.delete(book.get());
         } else
-            throw new NotFoundException("Book not found");
+            throw new GeneralException("Book not found", HttpStatus.NOT_FOUND);
     }
 
 }

@@ -2,10 +2,11 @@ package bookstore.bookstore.service;
 
 import bookstore.bookstore.dto.request.SaveCategoryRequest;
 import bookstore.bookstore.dto.request.UpdateCategoryRequest;
-import bookstore.bookstore.exception.NotFoundException;
+import bookstore.bookstore.exception.GeneralException;
 import bookstore.bookstore.model.Category;
 import bookstore.bookstore.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public class CategoryService {
             categoryRepository.save(categoryToUpdate.get());
             return categoryToUpdate.get();
         } else
-            throw new NotFoundException("Category not found");
+            throw new GeneralException("Category not found", HttpStatus.NOT_FOUND);
     }
 
     public List<Category> getAllCategories() {
@@ -43,7 +44,7 @@ public class CategoryService {
         if (category.isPresent()) {
             return category.get();
         } else
-            throw new NotFoundException("Category not found");
+            throw new GeneralException("Category not found", HttpStatus.NOT_FOUND);
     }
 
     public Category findByName(String name) {
@@ -51,6 +52,6 @@ public class CategoryService {
         if (category.isPresent()) {
             return category.get();
         } else
-            throw new NotFoundException("Category not found");
+            throw new GeneralException("Category not found", HttpStatus.NOT_FOUND);
     }
 }
