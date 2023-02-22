@@ -1,10 +1,8 @@
 package bookstore.bookstore.service;
 
 import bookstore.bookstore.dto.converter.UserDtoConvertor;
-import bookstore.bookstore.dto.request.SaveUserRequest;
 import bookstore.bookstore.dto.response.UserResponseDto;
 import bookstore.bookstore.exception.GeneralException;
-import bookstore.bookstore.model.Role;
 import bookstore.bookstore.model.User;
 import bookstore.bookstore.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,15 +17,18 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserResponseDto saveUser(SaveUserRequest request) {
-        User user = User.builder()
-                .username(request.getUsername())
-                .password(request.getPassword())
-                .email(request.getEmail())
-                .role(Role.valueOf(request.getRole()))
-                .build();
-        userRepository.save(user);
-        return UserDtoConvertor.convertToUserResponseDto(user);
+    public User saveUser(User user) {
+
+        return (User) userRepository.save(user);
+    }
+
+    public User findUserByUsername(String username)  {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            throw new GeneralException("User not found", HttpStatus.NOT_FOUND);
+        }
     }
 
     public UserResponseDto getUserById(Long id) {
@@ -40,4 +41,8 @@ public class UserService {
         }
     }
 
+    public Boolean existsByUsername(String username){
+
+        return userRepository.findByUsername(username).isPresent();
+    }
 }

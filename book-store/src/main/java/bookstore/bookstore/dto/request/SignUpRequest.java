@@ -1,17 +1,18 @@
 package bookstore.bookstore.dto.request;
 
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.management.relation.Role;
-
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SaveUserRequest {
+public class SignUpRequest {
 
     @NotBlank
     private String username;
@@ -19,6 +20,5 @@ public class SaveUserRequest {
     private String password;
     @Email
     private String email;
-    @NotBlank
-    private String role;
+
 }
