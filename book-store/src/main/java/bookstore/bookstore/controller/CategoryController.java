@@ -6,13 +6,17 @@ import bookstore.bookstore.model.Category;
 import bookstore.bookstore.service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/category")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyAuthority('ADMIN')")
+@Slf4j
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -30,6 +34,7 @@ public class CategoryController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public ResponseEntity<?> getAllCategories() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(categoryService.getAllCategories());

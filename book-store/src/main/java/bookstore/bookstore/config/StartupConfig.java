@@ -18,11 +18,20 @@ public class StartupConfig implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        userService.saveUser(new User(
-                "emirhan",
-                bCryptPasswordEncoder.encode("pass"),
-                "emirhan@gmail.com",
-                Role.ADMIN
-        ));
+        userService.saveUser(User.builder()
+                .username("emirhan")
+                .password(bCryptPasswordEncoder.encode("pass"))
+                .email("emirhan@gmail.com")
+                .role(Role.ADMIN)
+                .build()
+        );
+        userService.saveUser(User.builder()
+                .username("usta")
+                .password(bCryptPasswordEncoder.encode("pass"))
+                .email("usta@gmail.com")
+                .role(Role.USER)
+                .build()
+        );
+
     }
 }
