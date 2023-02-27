@@ -37,8 +37,8 @@ public class BookController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BookListResponseDto>> getAllBooks(@RequestParam(name = "page", value = "1") int page,
-                                                                 @RequestParam(name = "size", value = "5") int size)
+    public ResponseEntity<List<BookListResponseDto>> getAllBooks(@RequestParam(name = "page") int page,
+                                                                 @RequestParam(name = "size") int size)
     {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(bookListService.getAllBooks(page,size));
