@@ -1,0 +1,39 @@
+version: '3.7'
+
+services:
+
+  postgres:
+    image: postgres:12.2
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: bookstore
+    networks:
+        - shared-network
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+
+  app:
+    image: book-store
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+        - "8080:8080"
+    environment:
+      - spring.datasource.url=jdbc:postgresql://postgres:5432/bookstore
+      - SERVER_PORT=8080
+      - spring.datasource.username=postgres
+      - spring.datasource.password=123456
+    depends_on:
+      - postgres
+    networks:
+        - shared-network
+    restart: "no"
+
+networks:
+    shared-network:
+        driver: bridge
