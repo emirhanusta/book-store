@@ -9,7 +9,6 @@ import bookstore.bookstore.model.Category;
 import bookstore.bookstore.repository.BookRepository;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
-import org.springframework.http.HttpStatus;
 
 import java.util.Optional;
 
@@ -143,28 +142,6 @@ class BookServiceTest {
         verifyNoInteractions(categoryService);
     }
 
-    @Disabled
-    @Test
-    @DisplayName("Should throw GeneralException(\"Category not found\") when given update book request and category does not exist")
-    void shouldThrowGeneralException_WhenGivenUpdateBookDto_AndCategoryDoesNotExist() {
-        //yanlış calışıyor
-        //given
-
-        Long categoryId = 1L;
-        GeneralException generalException = new GeneralException("Category not found", HttpStatus.NOT_FOUND);
-
-        //when
-        when(categoryService.findById(categoryId)).thenThrow(generalException);
-
-        //then
-        assertThatThrownBy(() -> categoryService.findById(categoryId))
-                .isInstanceOf(GeneralException.class)
-                .hasMessageContaining("Category not found");
-
-        verify(categoryService).findById(anyLong());
-        verify(categoryService, times(1)).findById(anyLong());
-    }
-
     @Test
     @DisplayName("Should return BookResponseDto when given id and book exists")
     void shouldReturnBookResponseDto_WhenGivenIdAndBookExists() {
@@ -214,6 +191,28 @@ class BookServiceTest {
         verify(bookRepository, times(1)).findById(anyLong());
     }
 
+    @Test
+    @DisplayName("Should delete book when given id and book exists")
+    void shouldDeleteBook_WhenGivenIdAndBookExists() {
+
+        //given
+
+        Book book = Book.builder()
+                .title("title")
+                //.category(category)
+                .build();
+
+        //when
+        when(bookRepository.findById(anyLong())).thenReturn(Optional.of(book));
+        bookService.deleteBookById(1L);
+
+        //then
+        verify(bookRepository).findById(anyLong());
+        verify(bookRepository).delete(any(Book.class));
+        verify(bookRepository, times(1)).findById(anyLong());
+        verify(bookRepository, times(1)).delete(any(Book.class));
+
+    }
     @AfterEach
     void tearDown() {
     }

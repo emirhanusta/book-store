@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 
 @Service
 @RequiredArgsConstructor
@@ -65,11 +63,11 @@ public class BookService {
     }
 
     public void deleteBookById(Long id) {
-        Optional<Book> book = bookRepository.findById(id);
-        if (book.isPresent()) {
-            bookRepository.delete(book.get());
-        } else
-            throw new GeneralException("Book not found", HttpStatus.NOT_FOUND);
+
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new GeneralException("Book not found", HttpStatus.NOT_FOUND));
+
+        bookRepository.delete(book);
     }
 
 }
