@@ -6,6 +6,7 @@ import bookstore.bookstore.dto.request.SaveBookRequest;
 import bookstore.bookstore.dto.request.UpdateBookRequest;
 import bookstore.bookstore.exception.GeneralException;
 import bookstore.bookstore.model.Book;
+import bookstore.bookstore.model.Category;
 import bookstore.bookstore.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,40 +23,45 @@ public class BookService {
     private final CategoryService categoryService;
 
     public BookResponseDto saveBook(SaveBookRequest saveBookRequest) {
+
+        Category category = categoryService.findById(saveBookRequest.getCategoryId());
+
         Book book = Book.builder()
                 .title(saveBookRequest.getTitle())
                 .author(saveBookRequest.getAuthor())
                 .pages(saveBookRequest.getPages())
                 .description(saveBookRequest.getDescription())
-                .category(categoryService.findById(saveBookRequest.getCategoryId()))
+                .category(category)
                 .build();
         bookRepository.save(book);
+
         return BookDtoConverter.convertToBookResponse(book);
     }
 
     public BookResponseDto updateBook(UpdateBookRequest updateBookRequest) {
 
-        Optional<Book> book = bookRepository.findById(updateBookRequest.getId());
+        Book book = bookRepository.findById(updateBookRequest.getId())
+                .orElseThrow(() -> new GeneralException("Book not found", HttpStatus.NOT_FOUND));
+        Category category = categoryService.findById(updateBookRequest.getCategoryId());
 
-        if (book.isPresent()) {
-            book.get().setCategory(categoryService.findById(updateBookRequest.getCategoryId()));
-            book.get().setAuthor(updateBookRequest.getAuthor());
-            book.get().setDescription(updateBookRequest.getDescription());
-            book.get().setPages(updateBookRequest.getPages());
-            book.get().setTitle(updateBookRequest.getTitle());
-            bookRepository.save(book.get());
-            return BookDtoConverter.convertToBookResponse(book.get());
-        } else {
-            throw new GeneralException("Book not found", HttpStatus.NOT_FOUND);
-        }
+        book.setCategory(category);
+        book.setAuthor(updateBookRequest.getAuthor());
+        book.setDescription(updateBookRequest.getDescription());
+        book.setPages(updateBookRequest.getPages());
+        book.setTitle(updateBookRequest.getTitle());
+
+        bookRepository.save(book);
+
+        return BookDtoConverter.convertToBookResponse(book);
+
     }
 
     public BookResponseDto getBookById(Long id) {
-        Optional<Book> book = bookRepository.findById(id);
-        if (book.isPresent()) {
-            return BookDtoConverter.convertToBookResponse(book.get());
-        } else
-            throw new GeneralException("Book not found", HttpStatus.NOT_FOUND);
+
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new GeneralException("Book not found", HttpStatus.NOT_FOUND));
+
+        return BookDtoConverter.convertToBookResponse(book);
     }
 
     public void deleteBookById(Long id) {

@@ -40,11 +40,9 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
     public Category findById(Long id) {
-        Optional<Category> category = categoryRepository.findById(id);
-        if (category.isPresent()) {
-            return category.get();
-        } else
-            throw new GeneralException("Category not found", HttpStatus.NOT_FOUND);
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new GeneralException("Category not found", HttpStatus.NOT_FOUND));
+
     }
 
     public Category findByName(String name) {
