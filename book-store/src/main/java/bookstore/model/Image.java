@@ -1,6 +1,8 @@
 package bookstore.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Lob;
 import lombok.*;
 
 @Getter
@@ -11,6 +13,12 @@ import lombok.*;
 @Entity
 public class Image extends BaseEntity{
 
-        private String imageUrl;
+        private String name;
+
+        private String type;
+
+        @Lob
+        @Column(length = 1000)
+        private byte[] imageData;
 
 }

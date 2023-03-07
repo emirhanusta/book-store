@@ -7,6 +7,7 @@ import bookstore.dto.request.UpdateBookRequest;
 import bookstore.exception.GeneralException;
 import bookstore.model.Book;
 import bookstore.model.Category;
+import bookstore.model.Image;
 import bookstore.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -70,4 +71,12 @@ public class BookService {
         bookRepository.delete(book);
     }
 
+    public void updateBookImage(Long bookId, Image image) {
+        Book bookToUpdate = bookRepository.findById(bookId)
+                .orElseThrow(() -> new GeneralException("Book not found", HttpStatus.NOT_FOUND));
+
+        bookToUpdate.setImage(image);
+
+        bookRepository.save(bookToUpdate);
+    }
 }
