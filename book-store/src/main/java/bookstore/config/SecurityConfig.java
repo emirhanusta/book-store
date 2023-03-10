@@ -6,6 +6,7 @@ import bookstore.security.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -40,8 +41,11 @@ public class SecurityConfig {
                 .csrf().disable()
                 .cors().and()
                 .authorizeRequests(auth -> {
-                    auth.requestMatchers("/api/admin").hasAuthority("ADMIN");
-                    auth.requestMatchers("/api/user").hasAnyAuthority("ADMIN", "USER");
+                    auth.requestMatchers(HttpMethod.GET).permitAll();
+                    auth.requestMatchers("/api/v1/images/**").hasAnyAuthority("ADMIN", "USER");
+                    auth.requestMatchers("/api/v1/book/**").hasAnyAuthority("ADMIN", "USER");
+                    auth.requestMatchers("/api/v1/user/**").hasAnyAuthority("ADMIN", "USER");
+                    auth.requestMatchers("/api/v1/category/**").hasAnyAuthority("ADMIN");
                     auth.anyRequest().authenticated();
                 })
                 .formLogin().disable()
@@ -57,7 +61,7 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/api/public", "/api/auth/login", "/api/auth/signup", "/**");
+        return (web) -> web.ignoring().requestMatchers("/api/v1/auth/login", "/api/v1/auth/signup");
     }
 
     @Bean
