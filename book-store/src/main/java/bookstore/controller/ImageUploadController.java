@@ -36,7 +36,7 @@ public class ImageUploadController {
                 .contentType(MediaType.valueOf("image/png"))
                 .body(image);
     }
-    @GetMapping("/getById/{name}")
+    @GetMapping("/getById/{id}")
     public ResponseEntity<?>  getImageByName(@PathVariable Long id){
         byte[] image = imageUploadService.getById(id);
 
