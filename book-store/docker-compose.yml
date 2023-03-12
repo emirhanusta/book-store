@@ -3,7 +3,7 @@ version: '3.7'
 services:
 
   postgres:
-    image: postgres:12.2
+    image: postgres
     restart: always
     ports:
       - "5432:5432"
@@ -14,7 +14,7 @@ services:
     networks:
         - shared-network
     volumes:
-      - ./postgres-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
 
   app:
     image: book-store
@@ -33,6 +33,9 @@ services:
     networks:
         - shared-network
     restart: "no"
+
+volumes:
+  postgres-data:
 
 networks:
     shared-network:
