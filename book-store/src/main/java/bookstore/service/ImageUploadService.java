@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -20,13 +21,24 @@ public class ImageUploadService {
         private final ImageRepository imageRepository;
         private final BookService bookService;
 
-        public ImageUploadResponse uploadImage(MultipartFile file, Long bookId) throws IOException {
+        public ImageUploadResponse uploadImage(MultipartFile file, Long bookId)  {
 
-            Image image = Image.builder()
-                    .name(file.getOriginalFilename())
-                    .type(file.getContentType())
-                    .imageData(ImageUtils.compressImage(file.getBytes()))
-                    .build();
+            if (file.isEmpty()) {
+                throw new GeneralException("Image can not be empty", HttpStatus.BAD_REQUEST);
+            }
+            if (!Objects.equals(file.getContentType(), "image/png") && !Objects.equals(file.getContentType(), "image/jpeg")) {
+                throw new GeneralException("Image must be png or jpeg", HttpStatus.BAD_REQUEST);
+            }
+            Image image = null;
+            try {
+                image = Image.builder()
+                        .name(file.getOriginalFilename())
+                        .type(file.getContentType())
+                        .imageData(ImageUtils.compressImage(file.getBytes()))
+                        .build();
+            } catch (IOException e) {
+                throw new RuntimeException("Could not upload image");
+            }
 
             imageRepository.save(image);
             bookService.updateBookImage(bookId, image);
@@ -53,9 +65,9 @@ public class ImageUploadService {
         }
 
         public void deleteById(Long id) {
-            Image book = imageRepository.findById(id)
+            Image image = imageRepository.findById(id)
                     .orElseThrow(() -> new GeneralException("Book not found", HttpStatus.NOT_FOUND));
 
-            imageRepository.delete(book);
+            imageRepository.delete(image);
         }
 }
