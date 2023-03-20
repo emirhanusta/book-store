@@ -2,6 +2,7 @@ package bookstore.controller;
 
 import bookstore.dto.response.ImageUploadResponse;
 import bookstore.service.ImageUploadService;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/v1/images")
@@ -19,7 +19,8 @@ public class ImageUploadController {
     private final ImageUploadService imageUploadService;
 
     @PostMapping
-    public ResponseEntity<ImageUploadResponse> uploadImage(@RequestParam("image") MultipartFile file, @RequestParam("bookId") Long bookId) throws IOException {
+    public ResponseEntity<ImageUploadResponse> uploadImage( @RequestParam("image") @NotBlank MultipartFile file,
+                                                            @RequestParam("bookId") Long bookId) {
        ImageUploadResponse imageUploadResponse = imageUploadService.uploadImage(file, bookId);
 
         return ResponseEntity.status(HttpStatus.OK)
