@@ -43,12 +43,10 @@ public class ImageUploadService {
             imageRepository.save(image);
             bookService.updateBookImage(bookId, image);
 
-            return ImageUploadResponse.builder()
-                    .id(image.getId())
-                    .name(image.getName())
-                    .bookId(bookId)
-                    .build();
-
+            return new ImageUploadResponse(
+                    image.getId(),
+                    bookId,
+                    image.getName());
         }
 
         public byte[] getById(Long id) {

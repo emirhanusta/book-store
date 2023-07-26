@@ -1,13 +1,9 @@
 package bookstore.dto.response;
 
-import lombok.Builder;
-import lombok.Data;
+public record ImageUploadResponse(
+        Long id,
+        Long bookId,
+        String name
+) {
 
-@Data
-@Builder
-public class ImageUploadResponse {
-
-    private Long id;
-    private Long bookId;
-    private String name;
 }

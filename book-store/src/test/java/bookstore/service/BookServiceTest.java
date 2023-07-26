@@ -42,20 +42,26 @@ class BookServiceTest {
                 .name("name")
                 .build();
 
-        SaveBookRequest saveBookRequest = SaveBookRequest.builder()
-                .title("title")
-                .categoryId(1L)
-                .build();
+        SaveBookRequest saveBookRequest = new SaveBookRequest(
+                "title",
+                "author",
+                718,
+                "description",
+                1L);
 
         Book book = Book.builder()
-                .title(saveBookRequest.getTitle())
+                .title(saveBookRequest.title())
                 .category(category)
                 .build();
 
-        BookResponseDto bookResponseDto = BookResponseDto.builder()
-                .title(saveBookRequest.getTitle())
-                .categoryId(category.getId())
-                .build();
+        BookResponseDto bookResponseDto = new BookResponseDto(
+                book.getId(),
+                book.getTitle(),
+                book.getAuthor(),
+                book.getPages(),
+                book.getDescription(),
+                book.getCategory().getId(),
+                null);
 
         //when
         when(categoryService.findById(anyLong())).thenReturn(category);
@@ -64,8 +70,8 @@ class BookServiceTest {
         //then
         BookResponseDto result = bookService.saveBook(saveBookRequest);
         assertEquals(bookResponseDto, result);
-        assertEquals(bookResponseDto.getTitle(), result.getTitle());
-        assertEquals(bookResponseDto.getCategoryId(), result.getCategoryId());
+        assertEquals(bookResponseDto.title(), result.title());
+        assertEquals(bookResponseDto.categoryId(), result.categoryId());
 
         verify(categoryService).findById(anyLong());
         verify(bookRepository).save(any(Book.class));
@@ -82,21 +88,28 @@ class BookServiceTest {
                 .name("name")
                 .build();
 
-        UpdateBookRequest updateBookRequest = UpdateBookRequest.builder()
-                .id(1L)
-                .title("updated title")
-                .categoryId(1L)
-                .build();
+        UpdateBookRequest updateBookRequest = new UpdateBookRequest(
+                1L,
+                "updated title",
+                "updated author",
+                1234,
+                "updated description",
+                1L
+        );
 
         Book book = Book.builder()
-                .title(updateBookRequest.getTitle())
+                .title(updateBookRequest.title())
                 .category(category)
                 .build();
 
-        BookResponseDto bookResponseDto = BookResponseDto.builder()
-                .title(updateBookRequest.getTitle())
-                .categoryId(category.getId())
-                .build();
+        BookResponseDto bookResponseDto = new BookResponseDto(
+                book.getId(),
+                book.getTitle(),
+                book.getAuthor(),
+                book.getPages(),
+                book.getDescription(),
+                book.getCategory().getId(),
+                null);
 
         //when
         when(bookRepository.findById(anyLong())).thenReturn(Optional.of(book));
@@ -106,8 +119,8 @@ class BookServiceTest {
         //then
         BookResponseDto result = bookService.updateBook(updateBookRequest);
         assertEquals(bookResponseDto, result);
-        assertEquals(bookResponseDto.getTitle(), result.getTitle());
-        assertEquals(bookResponseDto.getCategoryId(), result.getCategoryId());
+        assertEquals(bookResponseDto.title(), result.title());
+        assertEquals(bookResponseDto.categoryId(), result.categoryId());
 
         verify(categoryService).findById(anyLong());
         verify(bookRepository).save(any(Book.class));
@@ -122,11 +135,14 @@ class BookServiceTest {
     void shouldThrowGeneralException_WhenGivenUpdateBookDtoAndBookDoesNotExist() {
 
         //given
-        UpdateBookRequest updateBookRequest = UpdateBookRequest.builder()
-                .id(1L)
-                .title("updated title")
-                .categoryId(1L)
-                .build();
+        UpdateBookRequest updateBookRequest = new UpdateBookRequest(
+                1L,
+                "updated title",
+                "updated author",
+                1234,
+                "updated description",
+                1L
+        );
 
 
         //when
@@ -156,17 +172,21 @@ class BookServiceTest {
                 .category(category)
                 .build();
 
-        BookResponseDto bookResponseDto = BookResponseDto.builder()
-                .id(book.getId())
-                .title(book.getTitle())
-                .build();
+        BookResponseDto bookResponseDto = new BookResponseDto(
+                book.getId(),
+                book.getTitle(),
+                book.getAuthor(),
+                book.getPages(),
+                book.getDescription(),
+                book.getCategory().getId(),
+                null);
         //when
         when(bookRepository.findById(anyLong())).thenReturn(Optional.of(book));
 
         //then
         BookResponseDto result = bookService.getBookById(1L);
         assertEquals(bookResponseDto, result);
-        assertEquals(bookResponseDto.getTitle(), result.getTitle());
+        assertEquals(bookResponseDto.title(), result.title());
 
         verify(bookRepository).findById(anyLong());
         verify(bookRepository, times(1)).findById(anyLong());

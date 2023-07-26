@@ -20,16 +20,16 @@ public class CategoryService {
 
     public Category saveCategory(SaveCategoryRequest category) {
         Category categoryToSave = Category.builder()
-                .name(category.getName())
+                .name(category.name())
                 .build();
         categoryRepository.save(categoryToSave);
         return categoryToSave;
     }
 
     public Category updateCategory(UpdateCategoryRequest category) {
-        Optional<Category> categoryToUpdate = categoryRepository.findById(category.getId());
+        Optional<Category> categoryToUpdate = categoryRepository.findById(category.id());
         if (categoryToUpdate.isPresent()) {
-            categoryToUpdate.get().setName(category.getName());
+            categoryToUpdate.get().setName(category.name());
             categoryRepository.save(categoryToUpdate.get());
             return categoryToUpdate.get();
         } else

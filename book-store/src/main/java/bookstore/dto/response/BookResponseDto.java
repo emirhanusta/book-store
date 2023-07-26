@@ -1,22 +1,38 @@
 package bookstore.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import bookstore.model.Book;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class BookResponseDto {
+public record BookResponseDto (
+        Long id,
+        String title,
+        String author,
+        Integer pages,
+        String description,
+        Long categoryId,
+        Long imageId
+){
+    public static BookResponseDto convertToBookResponse(Book book) {
 
-    private Long id;
-    private String title;
-    private String author;
-    private Integer pages;
-    private String description;
-    private Long categoryId;
-    private Long imageId;
+        if (book.getImage() == null)
+            return new BookResponseDto(
+                    book.getId(),
+                    book.getTitle(),
+                    book.getAuthor(),
+                    book.getPages(),
+                    book.getDescription(),
+                    book.getCategory().getId(),
+                    null);
+
+            return new BookResponseDto(
+                    book.getId(),
+                    book.getTitle(),
+                    book.getAuthor(),
+                    book.getPages(),
+                    book.getDescription(),
+                    book.getCategory().getId(),
+                    book.getImage().getId());
+
+    }
+
 
 }

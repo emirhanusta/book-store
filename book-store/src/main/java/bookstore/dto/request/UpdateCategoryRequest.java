@@ -1,12 +1,10 @@
 package bookstore.dto.request;
 
-import lombok.Data;
+public record UpdateCategoryRequest (
 
-@Data
-public class UpdateCategoryRequest {
+    Long id,
 
-    private Long id;
-
-    private String name;
+    String name
+){
 }
 

@@ -1,7 +1,6 @@
 package bookstore.service;
 
 import bookstore.dto.response.BookResponseDto;
-import bookstore.dto.converter.BookDtoConverter;
 import bookstore.dto.request.SaveBookRequest;
 import bookstore.dto.request.UpdateBookRequest;
 import bookstore.exception.GeneralException;
@@ -23,35 +22,35 @@ public class BookService {
 
     public BookResponseDto saveBook(SaveBookRequest saveBookRequest) {
 
-        Category category = categoryService.findById(saveBookRequest.getCategoryId());
+        Category category = categoryService.findById(saveBookRequest.categoryId());
 
         Book book = Book.builder()
-                .title(saveBookRequest.getTitle())
-                .author(saveBookRequest.getAuthor())
-                .pages(saveBookRequest.getPages())
-                .description(saveBookRequest.getDescription())
+                .title(saveBookRequest.title())
+                .author(saveBookRequest.author())
+                .pages(saveBookRequest.pages())
+                .description(saveBookRequest.description())
                 .category(category)
                 .build();
         bookRepository.save(book);
 
-        return BookDtoConverter.convertToBookResponse(book);
+        return BookResponseDto.convertToBookResponse(book);
     }
 
     public BookResponseDto updateBook(UpdateBookRequest updateBookRequest) {
 
-        Book book = bookRepository.findById(updateBookRequest.getId())
+        Book book = bookRepository.findById(updateBookRequest.id())
                 .orElseThrow(() -> new GeneralException("Book not found", HttpStatus.NOT_FOUND));
-        Category category = categoryService.findById(updateBookRequest.getCategoryId());
+        Category category = categoryService.findById(updateBookRequest.categoryId());
 
         book.setCategory(category);
-        book.setAuthor(updateBookRequest.getAuthor());
-        book.setDescription(updateBookRequest.getDescription());
-        book.setPages(updateBookRequest.getPages());
-        book.setTitle(updateBookRequest.getTitle());
+        book.setAuthor(updateBookRequest.author());
+        book.setDescription(updateBookRequest.description());
+        book.setPages(updateBookRequest.pages());
+        book.setTitle(updateBookRequest.title());
 
         bookRepository.save(book);
 
-        return BookDtoConverter.convertToBookResponse(book);
+        return BookResponseDto.convertToBookResponse(book);
 
     }
 
@@ -60,7 +59,7 @@ public class BookService {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new GeneralException("Book not found", HttpStatus.NOT_FOUND));
 
-        return BookDtoConverter.convertToBookResponse(book);
+        return BookResponseDto.convertToBookResponse(book);
     }
 
     public void deleteBookById(Long id) {

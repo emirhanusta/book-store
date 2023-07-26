@@ -22,7 +22,7 @@ public class StartupConfig implements CommandLineRunner {
     private final CategoryService categoryService;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         userService.saveUser(User.builder()
                 .username("emirhan")
                 .password(bCryptPasswordEncoder.encode("pass"))
@@ -40,20 +40,25 @@ public class StartupConfig implements CommandLineRunner {
         categoryService.saveCategory(new SaveCategoryRequest(
                 "Novel"
         ));
-        bookService.saveBook(SaveBookRequest.builder()
-                .title("The Lord of the Rings")
-                .author("J.R.R. Tolkien")
-                .pages(1216)
-                .categoryId(1L)
-                .description("The Lord of the Rings is an epic high fantasy novel written by English author and scholar J. R. R. Tolkien.")
-                .build());
-        bookService.saveBook(SaveBookRequest.builder()
-                .title("Harry Potter and the Philosopher's Stone")
-                .author("J.K. Rowling")
-                .pages(223)
-                .description("Harry Potter and the Philosopher's Stone is a fantasy novel written by British author J. K. Rowling.")
-                .categoryId(1L)
-                .build());
+        bookService.saveBook(
+                new SaveBookRequest(
+                        "The Lord of the Rings",
+                        "J.R.R. Tolkien",
+                        1216,
+                        "The Lord of the Rings is an epic high fantasy novel written by English author and scholar J. R. R. Tolkien.",
+                        1L
 
+                )
+        );
+        bookService.saveBook(
+                new SaveBookRequest(
+                        "Harry Potter and the Philosopher's Stone",
+                        "J.K. Rowling",
+                        223,
+                        "Harry Potter and the Philosopher's Stone is a fantasy novel written by British author J. K. Rowling",
+                        1L
+
+                )
+        );
     }
 }

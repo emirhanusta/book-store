@@ -1,6 +1,5 @@
 package bookstore.service;
 
-import bookstore.dto.converter.UserDtoConvertor;
 import bookstore.dto.request.LoginRequest;
 import bookstore.dto.request.SignUpRequest;
 import bookstore.dto.response.TokenResponseDto;
@@ -32,14 +31,14 @@ public class AuthService {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            loginRequest.getUsername(),
-                            loginRequest.getPassword()
+                            loginRequest.username(),
+                            loginRequest.password()
                     )
             );
-            return TokenResponseDto.builder()
-                    .token(tokenService.generateToken(authentication))
-                    .user(UserDtoConvertor.convertToUserResponseDto(userService.findUserByUsername(loginRequest.getUsername())))
-                    .build();
+            return  new TokenResponseDto(
+                    tokenService.generateToken(authentication),
+                    UserResponseDto.convertToUserResponseDto(userService.findUserByUsername(loginRequest.username()))
+            );
         }catch (final BadCredentialsException e) {
             throw new GeneralException("Incorrect username or password", HttpStatus.UNAUTHORIZED);
         }
@@ -47,24 +46,24 @@ public class AuthService {
 
     public UserResponseDto signup(SignUpRequest signUpRequest) {
 
-        var isAllReadyRegistired= userService.existsByUsername(signUpRequest.getUsername());
+        var isAllReadyRegistired= userService.existsByUsername(signUpRequest.username());
 
         if(isAllReadyRegistired){
             throw new GeneralException("Username is already used",HttpStatus.FOUND);
         }
 
         var user = User.builder()
-                .username(signUpRequest.getUsername())
-                .password(encoder.encode(signUpRequest.getPassword()))
+                .username(signUpRequest.username())
+                .password(encoder.encode(signUpRequest.password()))
                 .role(Role.USER)
-                .email(signUpRequest.getEmail())
+                .email(signUpRequest.email())
                 .build();
 
-        return UserDtoConvertor.convertToUserResponseDto(userService.saveUser(user));
+        return UserResponseDto.convertToUserResponseDto(userService.saveUser(user));
     }
 
     public UserResponseDto getAuthenticatedUser() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return UserDtoConvertor.convertToUserResponseDto(userService.findUserByUsername(username));
+        return UserResponseDto.convertToUserResponseDto(userService.findUserByUsername(username));
     }
 }
