@@ -2,6 +2,7 @@ package bookstore.service;
 
 import bookstore.dto.request.SaveCategoryRequest;
 import bookstore.dto.request.UpdateCategoryRequest;
+import bookstore.dto.response.CategoryResponseDto;
 import bookstore.exception.GeneralException;
 import bookstore.model.Category;
 import bookstore.repository.CategoryRepository;
@@ -18,26 +19,28 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    public Category saveCategory(SaveCategoryRequest category) {
+    public CategoryResponseDto saveCategory(SaveCategoryRequest category) {
         Category categoryToSave = Category.builder()
                 .name(category.name())
                 .build();
         categoryRepository.save(categoryToSave);
-        return categoryToSave;
+        return CategoryResponseDto.convertToCategoryResponse(categoryToSave);
     }
 
-    public Category updateCategory(UpdateCategoryRequest category) {
+    public CategoryResponseDto updateCategory(UpdateCategoryRequest category) {
         Optional<Category> categoryToUpdate = categoryRepository.findById(category.id());
         if (categoryToUpdate.isPresent()) {
             categoryToUpdate.get().setName(category.name());
             categoryRepository.save(categoryToUpdate.get());
-            return categoryToUpdate.get();
+            return CategoryResponseDto.convertToCategoryResponse(categoryToUpdate.get());
         } else
             throw new GeneralException("Category not found", HttpStatus.NOT_FOUND);
     }
 
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+    public List<CategoryResponseDto> getAllCategories() {
+        return categoryRepository.findAll()
+                .stream().
+                map(CategoryResponseDto::convertToCategoryResponse).toList();
     }
     public Category findById(Long id) {
         return categoryRepository.findById(id)
@@ -45,7 +48,7 @@ public class CategoryService {
 
     }
 
-    public Category findByName(String name) {
+    protected Category findByName(String name) {
         Optional<Category> category = categoryRepository.findByName(name);
         if (category.isPresent()) {
             return category.get();
