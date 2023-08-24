@@ -38,8 +38,8 @@ public class BookService {
 
     public BookResponseDto updateBook(UpdateBookRequest updateBookRequest) {
 
-        Book book = bookRepository.findById(updateBookRequest.id())
-                .orElseThrow(() -> new GeneralException("Book not found", HttpStatus.NOT_FOUND));
+        Book book = findById(updateBookRequest.id());
+
         Category category = categoryService.findById(updateBookRequest.categoryId());
 
         book.setCategory(category);
@@ -54,28 +54,27 @@ public class BookService {
 
     }
 
-    public BookResponseDto getBookById(Long id) {
-
-        Book book = bookRepository.findById(id)
-                .orElseThrow(() -> new GeneralException("Book not found", HttpStatus.NOT_FOUND));
-
+    public BookResponseDto getBookById(Long bookId) {
+        Book book = findById(bookId);
         return BookResponseDto.convertToBookResponse(book);
     }
 
-    public void deleteBookById(Long id) {
+    public void deleteBookById(Long bookId) {
 
-        Book book = bookRepository.findById(id)
-                .orElseThrow(() -> new GeneralException("Book not found", HttpStatus.NOT_FOUND));
-
+        Book book = findById(bookId);
         bookRepository.delete(book);
     }
 
     public void updateBookImage(Long bookId, Image image) {
-        Book bookToUpdate = bookRepository.findById(bookId)
-                .orElseThrow(() -> new GeneralException("Book not found", HttpStatus.NOT_FOUND));
-
+        Book bookToUpdate = findById(bookId);
         bookToUpdate.setImage(image);
 
         bookRepository.save(bookToUpdate);
+    }
+
+    private Book findById(Long id){
+        return bookRepository.findById(id)
+                .orElseThrow(() -> new GeneralException("Book not found", HttpStatus.NOT_FOUND));
+
     }
 }

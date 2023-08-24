@@ -6,6 +6,7 @@ import bookstore.dto.response.BookResponseDto;
 import bookstore.exception.GeneralException;
 import bookstore.model.Book;
 import bookstore.model.Category;
+import bookstore.model.Image;
 import bookstore.repository.BookRepository;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
@@ -50,8 +51,12 @@ class BookServiceTest {
                 1L);
 
         Book book = Book.builder()
+                .category(category)
+                .pages(saveBookRequest.pages())
+                .author(saveBookRequest.author())
                 .title(saveBookRequest.title())
                 .category(category)
+                .description(saveBookRequest.description())
                 .build();
 
         BookResponseDto bookResponseDto = new BookResponseDto(
@@ -98,8 +103,12 @@ class BookServiceTest {
         );
 
         Book book = Book.builder()
+                .category(category)
+                .pages(updateBookRequest.pages())
+                .author(updateBookRequest.author())
                 .title(updateBookRequest.title())
                 .category(category)
+                .description(updateBookRequest.description())
                 .build();
 
         BookResponseDto bookResponseDto = new BookResponseDto(
@@ -232,6 +241,30 @@ class BookServiceTest {
         verify(bookRepository, times(1)).findById(anyLong());
         verify(bookRepository, times(1)).delete(any(Book.class));
 
+    }
+    @Test
+    @DisplayName("Should Update Book Image when bookId and Image exist")
+    void shouldUpdateBookImageWhenBookIdAndImageExist(){
+
+            //given
+            Book book = Book.builder()
+                    .title("title")
+                    .build();
+
+            Image image = Image.builder()
+                    .imageData(new byte[0])
+                    .build();
+
+            //when
+            when(bookRepository.findById(anyLong())).thenReturn(Optional.of(book));
+            when(bookRepository.save(any(Book.class))).thenReturn(Book.builder().image(image).build());
+            //then
+            bookService.updateBookImage(1L, image);
+
+            verify(bookRepository).findById(anyLong());
+            verify(bookRepository).save(any(Book.class));
+            verify(bookRepository, times(1)).findById(anyLong());
+            verify(bookRepository, times(1)).save(any(Book.class));
     }
     @AfterEach
     void tearDown() {
