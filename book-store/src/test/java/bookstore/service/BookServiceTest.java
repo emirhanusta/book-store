@@ -111,14 +111,7 @@ class BookServiceTest {
                 .description(updateBookRequest.description())
                 .build();
 
-        BookResponseDto bookResponseDto = new BookResponseDto(
-                book.getId(),
-                book.getTitle(),
-                book.getAuthor(),
-                book.getPages(),
-                book.getDescription(),
-                book.getCategory().getId(),
-                null);
+        BookResponseDto bookResponseDto = BookResponseDto.convertToBookResponse(book);
 
         //when
         when(bookRepository.findById(anyLong())).thenReturn(Optional.of(book));

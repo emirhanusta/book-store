@@ -22,4 +22,5 @@ public class Category extends BaseEntity{
     @OneToMany(mappedBy = "category")
     @JsonIgnore
     private List<Book> books;
+
 }

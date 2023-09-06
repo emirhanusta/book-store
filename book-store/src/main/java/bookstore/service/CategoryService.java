@@ -27,14 +27,14 @@ public class CategoryService {
         return CategoryResponseDto.convertToCategoryResponse(categoryToSave);
     }
 
-    public CategoryResponseDto updateCategory(UpdateCategoryRequest category) {
-        Optional<Category> categoryToUpdate = categoryRepository.findById(category.id());
+    public CategoryResponseDto updateCategory(UpdateCategoryRequest updateCategoryRequest) {
+        Optional<Category> categoryToUpdate = categoryRepository.findById(updateCategoryRequest.id());
         if (categoryToUpdate.isPresent()) {
-            categoryToUpdate.get().setName(category.name());
+            categoryToUpdate.get().setName(updateCategoryRequest.name());
             categoryRepository.save(categoryToUpdate.get());
             return CategoryResponseDto.convertToCategoryResponse(categoryToUpdate.get());
         } else
-            throw new GeneralException("Category not found", HttpStatus.NOT_FOUND);
+            throw new GeneralException("Category with id: " + updateCategoryRequest.id() + " does not exist", HttpStatus.NOT_FOUND);
     }
 
     public List<CategoryResponseDto> getAllCategories() {
@@ -42,6 +42,7 @@ public class CategoryService {
                 .stream().
                 map(CategoryResponseDto::convertToCategoryResponse).toList();
     }
+
     public Category findById(Long id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new GeneralException("Category not found", HttpStatus.NOT_FOUND));
@@ -55,4 +56,5 @@ public class CategoryService {
         } else
             throw new GeneralException("Category not found", HttpStatus.NOT_FOUND);
     }
+
 }
