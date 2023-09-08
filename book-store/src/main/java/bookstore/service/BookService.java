@@ -29,6 +29,7 @@ public class BookService {
                 .author(saveBookRequest.author())
                 .pages(saveBookRequest.pages())
                 .description(saveBookRequest.description())
+                .publisher(saveBookRequest.publisher())
                 .category(category)
                 .build();
         bookRepository.save(book);

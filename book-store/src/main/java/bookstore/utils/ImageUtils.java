@@ -1,5 +1,7 @@
 package bookstore.utils;
 
+import bookstore.exception.GeneralException;
+
 import java.io.ByteArrayOutputStream;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
@@ -21,6 +23,7 @@ public class ImageUtils {
         try {
             outputStream.close();
         } catch (Exception e) {
+            throw new GeneralException(e.getMessage(), null);
         }
         return outputStream.toByteArray();
     }
@@ -31,12 +34,13 @@ public class ImageUtils {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
         byte[] tmp = new byte[4*1024];
         try {
-            while (!inflater.finished()) {
+            while (!inflater.finished() && !inflater.needsInput()) {
                 int count = inflater.inflate(tmp);
                 outputStream.write(tmp, 0, count);
             }
             outputStream.close();
         } catch (Exception exception) {
+            throw new GeneralException(exception.getMessage(), null);
         }
         return outputStream.toByteArray();
     }

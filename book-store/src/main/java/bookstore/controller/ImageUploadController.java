@@ -29,7 +29,7 @@ public class ImageUploadController {
 
     @GetMapping("/getByName/{name}")
     public ResponseEntity<?>  getImageByName(@PathVariable String name){
-        byte[] image = imageUploadService.getImage(name);
+        byte[] image = imageUploadService.getImageByName(name);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf("image/png"))
@@ -37,7 +37,7 @@ public class ImageUploadController {
     }
     @GetMapping("/getById/{id}")
     public ResponseEntity<?>  getImageByName(@PathVariable Long id){
-        byte[] image = imageUploadService.getById(id);
+        byte[] image = imageUploadService.getImageById(id);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf("image/png"))

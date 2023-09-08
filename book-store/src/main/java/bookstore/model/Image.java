@@ -7,8 +7,6 @@ import lombok.*;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 @Entity
 public class Image extends BaseEntity{

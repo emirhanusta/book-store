@@ -29,7 +29,7 @@ public class ImageUploadService {
             if (!Objects.equals(file.getContentType(), "image/png") && !Objects.equals(file.getContentType(), "image/jpeg")) {
                 throw new GeneralException("Image must be png or jpeg", HttpStatus.BAD_REQUEST);
             }
-            Image image = null;
+            Image image;
             try {
                 image = Image.builder()
                         .name(file.getOriginalFilename())
@@ -37,7 +37,7 @@ public class ImageUploadService {
                         .imageData(ImageUtils.compressImage(file.getBytes()))
                         .build();
             } catch (IOException e) {
-                throw new RuntimeException("Could not upload image");
+                throw new GeneralException(e.getMessage(), HttpStatus.BAD_REQUEST);
             }
 
             imageRepository.save(image);
@@ -49,23 +49,24 @@ public class ImageUploadService {
                     image.getName());
         }
 
-        public byte[] getById(Long id) {
-            Image dbImage = imageRepository.findById(id).orElseThrow(
-                    () -> new GeneralException("Image not found", HttpStatus.NOT_FOUND));
+        public byte[] getImageById(Long id) {
+            Image dbImage = findImageById(id);
             return ImageUtils.decompressImage(dbImage.getImageData());
         }
 
         @Transactional
-        public byte[] getImage(String name) {
+        public byte[] getImageByName(String name) {
             Image dbImage = imageRepository.findByName(name).orElseThrow(
                 () -> new GeneralException("Image not found", HttpStatus.NOT_FOUND));
             return ImageUtils.decompressImage(dbImage.getImageData());
         }
 
         public void deleteById(Long id) {
-            Image image = imageRepository.findById(id)
-                    .orElseThrow(() -> new GeneralException("Book not found", HttpStatus.NOT_FOUND));
+            imageRepository.delete(findImageById(id));
+        }
 
-            imageRepository.delete(image);
+        private Image findImageById(Long id) {
+            return imageRepository.findById(id).orElseThrow(
+                    () -> new GeneralException("Image not found", HttpStatus.NOT_FOUND));
         }
 }
