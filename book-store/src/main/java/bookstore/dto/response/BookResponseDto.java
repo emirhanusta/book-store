@@ -8,6 +8,7 @@ public record BookResponseDto (
         String author,
         Integer pages,
         String description,
+        String publisher,
         Long categoryId,
         Long imageId
 ){
@@ -20,6 +21,7 @@ public record BookResponseDto (
                     book.getAuthor(),
                     book.getPages(),
                     book.getDescription(),
+                    book.getPublisher(),
                     book.getCategory().getId(),
                     null);
 
@@ -29,6 +31,7 @@ public record BookResponseDto (
                     book.getAuthor(),
                     book.getPages(),
                     book.getDescription(),
+                    book.getPublisher(),
                     book.getCategory().getId(),
                     book.getImage().getId());
 

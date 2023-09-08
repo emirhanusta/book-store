@@ -51,7 +51,7 @@ public class BookController {
     @GetMapping("/getByTitle/{title}")
     public ResponseEntity<List<BookListResponseDto>> getBookByTitle(@PathVariable String title) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(bookListService.getBookByTitle(title));
+                .body(bookListService.getAllBooksByTitle(title));
     }
 
     @GetMapping("/getByCategoryName/{categoryName}")
@@ -59,7 +59,6 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(bookListService.getBooksByCategoryName(categoryName));
     }
-
 
     @DeleteMapping
     public ResponseEntity<Void> deleteBookById(@PathVariable Long id) {

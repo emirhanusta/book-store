@@ -48,6 +48,7 @@ class BookServiceTest {
                 "author",
                 718,
                 "description",
+                "publisher",
                 1L);
 
         Book book = Book.builder()
@@ -56,6 +57,7 @@ class BookServiceTest {
                 .author(saveBookRequest.author())
                 .title(saveBookRequest.title())
                 .category(category)
+                .publisher(saveBookRequest.publisher())
                 .description(saveBookRequest.description())
                 .build();
 
@@ -65,6 +67,7 @@ class BookServiceTest {
                 book.getAuthor(),
                 book.getPages(),
                 book.getDescription(),
+                book.getPublisher(),
                 book.getCategory().getId(),
                 null);
 
@@ -99,6 +102,7 @@ class BookServiceTest {
                 "updated author",
                 1234,
                 "updated description",
+                "updated publisher",
                 1L
         );
 
@@ -108,6 +112,7 @@ class BookServiceTest {
                 .author(updateBookRequest.author())
                 .title(updateBookRequest.title())
                 .category(category)
+                .publisher(updateBookRequest.publisher())
                 .description(updateBookRequest.description())
                 .build();
 
@@ -143,6 +148,7 @@ class BookServiceTest {
                 "updated author",
                 1234,
                 "updated description",
+                "updated publisher",
                 1L
         );
 
@@ -180,6 +186,7 @@ class BookServiceTest {
                 book.getAuthor(),
                 book.getPages(),
                 book.getDescription(),
+                book.getPublisher(),
                 book.getCategory().getId(),
                 null);
         //when

@@ -8,6 +8,7 @@ public record SaveBookRequest(
         String author,
         Integer pages,
         String description,
+        String publisher,
         Long categoryId
 ) {
 }

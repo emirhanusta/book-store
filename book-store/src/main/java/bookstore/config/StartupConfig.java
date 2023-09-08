@@ -46,6 +46,7 @@ public class StartupConfig implements CommandLineRunner {
                         "J.R.R. Tolkien",
                         1216,
                         "The Lord of the Rings is an epic high fantasy novel written by English author and scholar J. R. R. Tolkien.",
+                        "publisher",
                         1L
 
                 )
@@ -56,6 +57,7 @@ public class StartupConfig implements CommandLineRunner {
                         "J.K. Rowling",
                         223,
                         "Harry Potter and the Philosopher's Stone is a fantasy novel written by British author J. K. Rowling",
+                        "publisher",
                         1L
 
                 )

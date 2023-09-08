@@ -2,6 +2,7 @@ package bookstore.service;
 
 import bookstore.dto.response.BookListResponseDto;
 import bookstore.model.Book;
+import bookstore.model.Category;
 import bookstore.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -25,13 +26,14 @@ public class BookListService {
     }
 
     public List<BookListResponseDto> getBooksByCategoryName(String categoryName) {
-        List<Book> books = bookRepository.findAllByCategory(categoryService.findByName(categoryName));
+        Category category = categoryService.findByName(categoryName);
+        List<Book> books = bookRepository.findAllByCategory(category);
         return books.stream()
                 .map(BookListResponseDto::convertToBookListResponse)
                 .toList();
     }
 
-    public List<BookListResponseDto> getBookByTitle(String title) {
+    public List<BookListResponseDto> getAllBooksByTitle(String title) {
         List<Book> books = bookRepository.findByTitle(title);
 
         return books.stream()

@@ -5,8 +5,6 @@ import lombok.*;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 @Entity
 public class Book extends BaseEntity{
@@ -15,6 +13,7 @@ public class Book extends BaseEntity{
     private String author;
     private Integer pages;
     private String description;
+    private String publisher;
 
     @OneToOne
     @JoinTable(name = "book_image",
