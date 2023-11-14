@@ -11,16 +11,12 @@ public record CategoryResponseDto(
 
 ) {
     public static CategoryResponseDto convertToCategoryResponse(Category category) {
-        if (category.getBooks() == null)
-            return
-                    new CategoryResponseDto(
-                    category.getId(),
-                    category.getName(),
-                    null);
-        return
-                new CategoryResponseDto(
-                        category.getId(),
-                        category.getName(),
-                        category.getBooks().stream().map(BookResponseDto::convertToBookResponse).toList());
+        return new CategoryResponseDto(
+                category.getId(),
+                category.getName(),
+                category.getBooks() == null ? null : category.getBooks()
+                        .stream()
+                        .map(BookResponseDto::convertToBookResponse)
+                        .toList());
     }
 }
