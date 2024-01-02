@@ -49,8 +49,7 @@ ___
 *$PORT: 8080*
 ```ssh
 $ cd book-store/book-store
-$ mvn clean install
-$ docker-compose up
+$ docker-compose up -d
 ```
 
 #### Maven
